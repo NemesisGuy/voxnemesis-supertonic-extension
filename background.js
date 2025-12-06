@@ -78,7 +78,9 @@ function ensureContextMenu() {
 
     try {
         chrome.contextMenus.removeAll(() => {
-            // ignore lastError for removeAll and recreate fresh
+            if (chrome.runtime.lastError) {
+                console.warn('Context menu removeAll error:', chrome.runtime.lastError.message);
+            }
             create();
         });
     } catch (e) {
@@ -116,6 +118,11 @@ chrome.runtime.onStartup.addListener(() => {
 
 // Also recreate context menu when the service worker wakes up
 ensureContextMenu();
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+    if (info.menuItemId === CONTEXT_MENU_ID) {
+        chrome.runtime.sendMessage({ command: 'play', text: info.selectionText, settings: {} });
+    }
+});
 
 // Listener for messages from Popup/Content
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
