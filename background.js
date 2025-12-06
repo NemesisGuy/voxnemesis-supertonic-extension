@@ -2,6 +2,7 @@
 
 let creating; // Promise to track offscreen creation
 let warmupPromise = null;
+const CONTEXT_MENU_ID = 'supertonic-read';
 
 async function getSelectedText(tabId) {
     // Try content script first for reliability, then fall back to executeScript.
@@ -58,6 +59,26 @@ async function setupOffscreenDocument(path) {
     }
 }
 
+function ensureContextMenu() {
+    try {
+        chrome.contextMenus.remove(CONTEXT_MENU_ID, () => chrome.runtime.lastError); // ignore missing
+    } catch (e) { /* ignore */ }
+
+    try {
+        chrome.contextMenus.create({
+            id: CONTEXT_MENU_ID,
+            title: 'Read with VoxNemesis TTS (Supertonic)',
+            contexts: ['selection'],
+            icons: {
+                16: 'icons/optimized/Nemesis_Logo_Icon@128.png',
+                32: 'icons/optimized/Nemesis_Logo_Icon@128.png'
+            }
+        });
+    } catch (e) {
+        console.warn('Context menu creation failed:', e);
+    }
+}
+
 async function warmUpEngine() {
     if (warmupPromise) return warmupPromise;
     warmupPromise = (async () => {
@@ -77,22 +98,17 @@ async function warmUpEngine() {
 chrome.runtime.onInstalled.addListener(() => {
     setupOffscreenDocument('offscreen.html');
     warmUpEngine();
-
-    chrome.contextMenus.create({
-        id: "supertonic-read",
-        title: "Read with VoxNemesis TTS (Supertonic)",
-        contexts: ["selection"],
-        icons: {
-            16: "icons/optimized/Nemesis_Logo_Icon@128.png",
-            32: "icons/optimized/Nemesis_Logo_Icon@128.png"
-        }
-    });
+    ensureContextMenu();
 });
 
 chrome.runtime.onStartup.addListener(() => {
     setupOffscreenDocument('offscreen.html');
     warmUpEngine();
+    ensureContextMenu();
 });
+
+// Also recreate context menu when the service worker wakes up
+ensureContextMenu();
 
 // Listener for messages from Popup/Content
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
