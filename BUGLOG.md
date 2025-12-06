@@ -3,13 +3,12 @@
 Track regressions and UX issues for the VoxNemesis Supertonic extension.
 
 ## Open
-- Overlay hangs (never hides after init/download) and Generate/Play inert in popup; context menu entry missing after highlight/right-click. Repro: load extension (MV3 SW), open popup, see overlay stuck; highlight page text → right-click shows no "Read with VoxNemesis TTS (Supertonic)" menu. Status: needs investigation.
-please add logo to that cxontext menue entry thatnks 
-
-overlay hangs on : Supertonic M1: cached... user has to mamuly close then repoern popup  
+- Integration sweep still pending: run manual checks (first-run download overlay, cached reopen, play/pause/seek) to confirm no regressions.
 
 ## Recently Fixed
-- Context menu entry recreated on install/startup/worker wake and shows Nemesis logo (commit 86adbd6).
+- Overlay hang resolved via modelsReady + watchdog polling in popup; no manual reopen needed (commit 952962e).
+- Context menu creation error fixed (removed unsupported icons prop); Nemesis logo now present via scaled icons and manifest defaults (commit 67ef174).
+- Context menu entry recreated on install/startup/worker wake (commit 86adbd6).
 - Popup IIFE closure restored so overlay/buttons initialize (commit 86adbd6).
 
 ## Notes
