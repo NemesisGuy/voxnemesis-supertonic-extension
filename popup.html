@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoxNemesis TTS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="glass-container">
+        <header class="title-row">
+            <img src="icons/optimized/Nemesis_Logo_Icon@128.png" alt="Nemesis Net Logo" class="logo-mark">
+            <h1>VoxNemesis <span class="highlight">TTS</span></h1>
+        </header>
+
+        <main>
+            <div class="controls-group">
+                <label for="voiceSelect">Voice</label>
+                <div class="select-wrapper">
+                    <select id="voiceSelect">
+                        <option value="" disabled selected>Loading voices...</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="controls-group">
+                <label for="rateRange">Speed: <span id="rateValue">1.0</span>x</label>
+                <input type="range" id="rateRange" min="0.5" max="3.0" step="0.1" value="1.0">
+            </div>
+
+            <div class="controls-group">
+                <label for="pitchRange">Pitch: <span id="pitchValue">1.0</span></label>
+                <input type="range" id="pitchRange" min="0.5" max="2.0" step="0.1" value="1.0">
+            </div>
+
+            <div class="controls-group">
+                <label for="volumeRange">Volume: <span id="volumeValue">1.0</span></label>
+                <input type="range" id="volumeRange" min="0.0" max="1.0" step="0.1" value="1.0">
+            </div>
+
+            <div class="controls-group">
+                <label for="seedInput">Seed (Optional):</label>
+                <input type="number" id="seedInput" placeholder="Random" class="glass-input">
+            </div>
+
+            <div class="controls-group">
+                <label for="qualitySelect">Quality / Speed</label>
+                <div class="select-wrapper">
+                    <select id="qualitySelect">
+                        <option value="10">High Quality (Slow)</option>
+                        <option value="6" selected>Balanced</option>
+                        <option value="4">Fast (Turbo)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Timeline -->
+            <div class="timeline-container">
+                <span id="currentTime">0:00</span>
+                <input type="range" id="progressBar" min="0" max="100" value="0" step="0.1">
+                <span id="duration">0:00</span>
+            </div>
+
+            <div class="actions">
+                <button id="generateBtn" class="action-btn">Generate Audio</button>
+            </div>
+
+            <div class="playback-controls">
+                <button id="playBtn" class="control-btn primary" title="Play Selected Text">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M8 5v14l11-7z" />
+                    </svg>
+                </button>
+                <button id="pauseBtn" class="control-btn" title="Pause">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+                    </svg>
+                </button>
+                <button id="stopBtn" class="control-btn warning" title="Stop">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M6 6h12v12H6z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div id="loader" class="loader hidden"></div>
+            <div id="statusMessage" class="status">Ready to read</div>
+        </main>
+    </div>
+    <script src="popup.js"></script>
+</body>
+
+</html>
