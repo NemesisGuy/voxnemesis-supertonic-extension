@@ -1,9 +1,9 @@
 # VoxNemesis TTS (Supertonic Edition)
 
-A Chrome extension that runs Supertonic's on-device ONNX TTS engine directly in the browser via an offscreen document. This variant is dedicated to the Supertonic engine; future engine variants can live alongside it under `projects/`.
+A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully in-browser via an offscreen document. Models are pulled on-demand from Hugging Face, cached locally, and reused offline.
 
 ## Features
-- Local-first text-to-speech with Supertonic ONNX models (auto-downloads once with in-popup status, then runs offline).
+- Local-first TTS with Supertonic ONNX models; popup overlay shows download/progress status and retries on errors.
 - Voice, rate, pitch, volume, quality (steps), and seed controls.
 - Context menu entry for quick read-out of selected text.
 - Playback controls with play/pause/stop, seeking, and progress display.
@@ -11,28 +11,30 @@ A Chrome extension that runs Supertonic's on-device ONNX TTS engine directly in 
 ## Load the Extension (Chrome/Edge)
 1. Open `chrome://extensions` (or `edge://extensions`).
 2. Enable **Developer mode**.
-3. Click **Load unpacked** and select `projects/voxnemesis-supertonic-extension`.
+3. Click **Load unpacked** and select the repository root folder (`voxnemesis-supertonic-extension`).
 4. Pin the extension if desired and open the popup to adjust settings.
 
 ## Usage
-- Select text on any page, then use **Generate Audio** to synthesize and play with current settings.
+- Select text on any page, then click **Generate Audio** to synthesize and play with current settings.
 - **Play/Pause/Stop** manage the current audio buffer; **Generate** refreshes audio for the latest selection.
 - Context menu: right-click selected text → **Read with VoxNemesis TTS (Supertonic)**.
 
 ## Development
-- Install dev deps for tests: `npm install` inside `projects/voxnemesis-supertonic-extension`.
-- Models download automatically on first run inside the extension (cached in the browser). Optional manual fetch for offline dev: `npm run fetch:assets` (clones https://huggingface.co/Supertone/supertonic into `assets/` and strips its .git).
-- Run unit tests: `npm test`.
-- Offscreen rendering uses `offscreen.html` + `offscreen.js`; the ONNX models and voice styles are expected under `assets/` after the fetch step.
+- Requirements: Node 18+ and git (for optional asset fetch). Install deps with `npm install`.
+- Models download automatically at runtime inside the extension and are cached via Cache Storage. For offline development you can clone them locally with `npm run fetch:assets` (clones https://huggingface.co/Supertone/supertonic into `assets/` and strips its `.git`).
+- Run unit tests: `npm test` (Jest + jsdom). Offscreen message tests stub `chrome.runtime`/fetch to avoid network.
+- Offscreen execution lives in `offscreen.html`/`offscreen.js`; the ONNX runtime bundles are under `lib/`.
 
 ## Folder Layout
 - `background.js` — service worker wiring popup/content to the offscreen engine.
-- `popup.html/js` — user controls and playback UI.
+- `popup.html`, `popup.js` — user controls, overlay/retry UX, playback UI.
 - `content.js` — legacy SpeechSynthesis path for basic page selection.
-- `offscreen.html/js` — Supertonic ONNX pipeline, audio playback, and progress events; also handles model caching.
-- `assets/` — ONNX models and voice style presets (optional manual download; normally cached at runtime).
-- `lib/` — ONNX Runtime web bundles and helper glue code.
+- `offscreen.html`, `offscreen.js` — Supertonic ONNX pipeline, audio playback, progress events, model caching.
+- `assets/` — ONNX models and voice styles (optional manual download; normally pulled/cached at runtime).
+- `lib/` — ONNX Runtime Web bundles and helper glue code.
+- `tests/` — Jest unit tests for helpers, popup logic, and offscreen messaging.
+- `.github/workflows/ci.yml` — CI running `npm test` on push/PR.
 
 ## Notes
-- This edition is Supertonic-specific; future engine variants can be cloned under `projects/` without mixing assets.
-- Keep `wasm-unsafe-eval` CSP entry to allow ONNX Runtime WebAssembly loading.
+- Keep the `wasm-unsafe-eval` CSP entry to allow ONNX Runtime WebAssembly loading.
+- First run requires network to download models; afterwards they are served from Cache Storage.
