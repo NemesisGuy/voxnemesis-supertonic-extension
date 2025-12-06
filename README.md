@@ -21,8 +21,9 @@ A Chrome extension that runs Supertonic's on-device ONNX TTS engine directly in 
 
 ## Development
 - Install dev deps for tests: `npm install` inside `projects/voxnemesis-supertonic-extension`.
+- Fetch Supertonic models (not tracked in git): `npm run fetch:assets` (clones https://huggingface.co/Supertone/supertonic into `assets/` and strips its .git).
 - Run unit tests: `npm test`.
-- Assets (ONNX models, voice styles) are bundled under `assets/`. Offscreen rendering uses `offscreen.html` + `offscreen.js`.
+- Offscreen rendering uses `offscreen.html` + `offscreen.js`; the ONNX models and voice styles are expected under `assets/` after the fetch step.
 
 ## Folder Layout
 - `background.js` — service worker wiring popup/content to the offscreen engine.
