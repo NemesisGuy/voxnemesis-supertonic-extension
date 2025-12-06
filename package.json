@@ -7,7 +7,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "fetch:assets": "node scripts/fetch-assets.js"
   },
   "keywords": [
     "tts",
