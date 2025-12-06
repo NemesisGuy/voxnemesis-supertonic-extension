@@ -60,22 +60,29 @@ async function setupOffscreenDocument(path) {
 }
 
 function ensureContextMenu() {
-    try {
-        chrome.contextMenus.remove(CONTEXT_MENU_ID, () => chrome.runtime.lastError); // ignore missing
-    } catch (e) { /* ignore */ }
+    const create = () => {
+        try {
+            chrome.contextMenus.create({
+                id: CONTEXT_MENU_ID,
+                title: 'Read with VoxNemesis TTS (Supertonic)',
+                contexts: ['selection'],
+                icons: {
+                    16: 'icons/optimized/Nemesis_Logo_Icon@128.png',
+                    32: 'icons/optimized/Nemesis_Logo_Icon@128.png'
+                }
+            });
+        } catch (e) {
+            console.warn('Context menu creation failed:', e);
+        }
+    };
 
     try {
-        chrome.contextMenus.create({
-            id: CONTEXT_MENU_ID,
-            title: 'Read with VoxNemesis TTS (Supertonic)',
-            contexts: ['selection'],
-            icons: {
-                16: 'icons/optimized/Nemesis_Logo_Icon@128.png',
-                32: 'icons/optimized/Nemesis_Logo_Icon@128.png'
-            }
+        chrome.contextMenus.removeAll(() => {
+            // ignore lastError for removeAll and recreate fresh
+            create();
         });
     } catch (e) {
-        console.warn('Context menu creation failed:', e);
+        create();
     }
 }
 
