@@ -29,6 +29,7 @@ Keep this living doc current. Track status with checkboxes and short notes/dates
 1) Extract small DOM helper utilities to reduce inline DOM handling in popup.
 2) Run manual integration sweep: first-run download overlay, cached reopen, play/pause/seek.
 3) Prep canary build + feedback loop (GitHub Discussions/test group).
+4) Release prep & publish: version bump, fresh build/zip, store listing copy (offline/ONNX + privacy), and smoke test from store build.
 
 Notes
 - Models download from HF at runtime, cached via Cache Storage; retry + overlay in place.
