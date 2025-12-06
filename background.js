@@ -65,11 +65,7 @@ function ensureContextMenu() {
             chrome.contextMenus.create({
                 id: CONTEXT_MENU_ID,
                 title: 'Read with VoxNemesis TTS (Supertonic)',
-                contexts: ['selection'],
-                icons: {
-                    16: 'icons/optimized/Nemesis_Logo_Icon@128.png',
-                    32: 'icons/optimized/Nemesis_Logo_Icon@128.png'
-                }
+                contexts: ['selection']
             });
         } catch (e) {
             console.warn('Context menu creation failed:', e);

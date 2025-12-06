@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let isDragging = false;
     let playbackState = 'stopped'; // stopped, playing, paused, generating, ready
     let hasAudio = false;
+    let overlayGuardInterval = null;
 
     // Pre-warm the offscreen engine so the first generate is faster.
     chrome.runtime.sendMessage({ target: 'offscreen', type: 'init', useWebGPU: true }).catch(() => { /* ignore */ });
@@ -46,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         isDragging = false;
         seek(e.target.value);
     });
+    startOverlayGuard();
 
     // Listen for progress updates from offscreen audio
     chrome.runtime.onMessage.addListener((msg) => {
@@ -90,6 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.runtime.sendMessage({ command: 'getStatus' }, (status) => {
         if (chrome.runtime.lastError) console.warn('Sync error:', chrome.runtime.lastError);
         if (status) {
+            if (status.modelsReady) {
+                hideOverlay('Models cached. Ready to read.');
+            }
             hasAudio = status.hasAudio;
             if (status.isPlaying) {
                 updateUIState('playing');
@@ -306,12 +311,32 @@ document.addEventListener('DOMContentLoaded', () => {
         overlay.classList.remove('hidden');
         overlayRetry.classList.toggle('hidden', !isError);
         overlayText.style.color = isError ? '#fca5a5' : '#f8fafc';
+        startOverlayGuard();
     }
 
     function hideOverlay(statusText) {
         if (statusText) updateStatus(statusText);
         overlay.classList.add('hidden');
         overlayRetry.classList.add('hidden');
+        stopOverlayGuard();
+    }
+
+    function startOverlayGuard() {
+        if (overlayGuardInterval) return;
+        overlayGuardInterval = setInterval(() => {
+            chrome.runtime.sendMessage({ command: 'getStatus' }, (status) => {
+                if (chrome.runtime.lastError) return;
+                if (status && (status.modelsReady || status.hasAudio)) {
+                    hideOverlay(status.modelsReady ? 'Models cached. Ready to read.' : 'Ready.');
+                }
+            });
+        }, 2000);
+    }
+
+    function stopOverlayGuard() {
+        if (!overlayGuardInterval) return;
+        clearInterval(overlayGuardInterval);
+        overlayGuardInterval = null;
     }
 
     function retryAssetDownload() {

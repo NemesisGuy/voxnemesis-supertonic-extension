@@ -33,4 +33,5 @@ Keep this living doc current. Track status with checkboxes and short notes/dates
 Notes
 - Models download from HF at runtime, cached via Cache Storage; retry + overlay in place.
 - Offscreen message tests now stub chrome runtime/fetch to avoid network during CI.
+- Integration issues to fix: popup overlay not hiding and buttons inert in runtime; context menu entry sometimes missing after install/startup (see BUGLOG.md).
 

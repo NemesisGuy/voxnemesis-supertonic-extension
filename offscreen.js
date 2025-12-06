@@ -19,6 +19,7 @@ const VOICE_STYLE_PATHS = {
 const objectUrlCache = new Map();
 let modelUrlMapPromise = null;
 let modelDownloadAnnounced = false;
+let modelsReady = false;
 const isTestEnv = typeof process !== 'undefined' && process.env && process.env.JEST_WORKER_ID;
 
 function buildDownloadUrl(path) {
@@ -131,7 +132,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
                 isPlaying: !!sourceNode && !isPaused,
                 isPaused: isPaused,
                 currentTime: getCurrentTime(),
-                duration: audioBufferGlobal ? audioBufferGlobal.duration : 0
+                duration: audioBufferGlobal ? audioBufferGlobal.duration : 0,
+                modelsReady
             });
             return false;
     }
@@ -246,6 +248,7 @@ async function getModelUrlMap() {
             return [key, objectUrl];
         }));
         sendAssetStatus({ phase: 'ready', message: 'Models cached. Ready to synthesize.' });
+        modelsReady = true;
         return Object.fromEntries(entries);
     })();
     return modelUrlMapPromise;

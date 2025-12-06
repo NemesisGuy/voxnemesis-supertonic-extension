@@ -1,0 +1,12 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "git-push-master",
+			"type": "shell",
+			"command": "cd \"c:\\Users\\Reign\\Documents\\Python Projects\\voxnemesis-supertonic-extension\"; git add README.md lib/helper.js manifest.json offscreen.js package-lock.json popup.html popup.js style.css tests/helper.test.js .github Plan.md popup.logic.js tests/offscreen.messages.test.js tests/popup.logic.test.js; git commit -m \"chore: update plan and add offscreen tests\"; git push origin master",
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}
