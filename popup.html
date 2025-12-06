@@ -13,6 +13,15 @@
 
 <body>
     <div class="glass-container">
+        <div id="fetchOverlay" class="overlay hidden">
+            <div class="overlay-content">
+                <div class="overlay-spinner"></div>
+                <div class="overlay-text-group">
+                    <div id="overlayText">Fetching resources from Hugging Face...</div>
+                    <button id="overlayRetry" class="overlay-retry hidden" type="button">Retry</button>
+                </div>
+            </div>
+        </div>
         <header class="title-row">
             <img src="icons/optimized/Nemesis_Logo_Icon@128.png" alt="Nemesis Net Logo" class="logo-mark">
             <h1>VoxNemesis <span class="highlight">TTS</span></h1>
@@ -92,7 +101,7 @@
             <div id="statusMessage" class="status">Ready to read</div>
         </main>
     </div>
-    <script src="popup.js"></script>
+    <script type="module" src="popup.js"></script>
 </body>
 
 </html>

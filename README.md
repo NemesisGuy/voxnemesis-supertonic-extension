@@ -3,7 +3,7 @@
 A Chrome extension that runs Supertonic's on-device ONNX TTS engine directly in the browser via an offscreen document. This variant is dedicated to the Supertonic engine; future engine variants can live alongside it under `projects/`.
 
 ## Features
-- Local-first text-to-speech with Supertonic ONNX models (no network calls).
+- Local-first text-to-speech with Supertonic ONNX models (auto-downloads once with in-popup status, then runs offline).
 - Voice, rate, pitch, volume, quality (steps), and seed controls.
 - Context menu entry for quick read-out of selected text.
 - Playback controls with play/pause/stop, seeking, and progress display.
@@ -21,7 +21,7 @@ A Chrome extension that runs Supertonic's on-device ONNX TTS engine directly in 
 
 ## Development
 - Install dev deps for tests: `npm install` inside `projects/voxnemesis-supertonic-extension`.
-- Fetch Supertonic models (not tracked in git): `npm run fetch:assets` (clones https://huggingface.co/Supertone/supertonic into `assets/` and strips its .git).
+- Models download automatically on first run inside the extension (cached in the browser). Optional manual fetch for offline dev: `npm run fetch:assets` (clones https://huggingface.co/Supertone/supertonic into `assets/` and strips its .git).
 - Run unit tests: `npm test`.
 - Offscreen rendering uses `offscreen.html` + `offscreen.js`; the ONNX models and voice styles are expected under `assets/` after the fetch step.
 
@@ -29,8 +29,8 @@ A Chrome extension that runs Supertonic's on-device ONNX TTS engine directly in 
 - `background.js` — service worker wiring popup/content to the offscreen engine.
 - `popup.html/js` — user controls and playback UI.
 - `content.js` — legacy SpeechSynthesis path for basic page selection.
-- `offscreen.html/js` — Supertonic ONNX pipeline, audio playback, and progress events.
-- `assets/` — ONNX models and voice style presets.
+- `offscreen.html/js` — Supertonic ONNX pipeline, audio playback, and progress events; also handles model caching.
+- `assets/` — ONNX models and voice style presets (optional manual download; normally cached at runtime).
 - `lib/` — ONNX Runtime web bundles and helper glue code.
 
 ## Notes

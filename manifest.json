@@ -10,12 +10,21 @@
         "storage",
         "offscreen"
     ],
+    "host_permissions": [
+        "https://huggingface.co/Supertone/supertonic/**"
+    ],
     "background": {
         "service_worker": "background.js"
     },
     "action": {
         "default_popup": "popup.html",
-        "default_title": "VoxNemesis TTS (Supertonic)"
+        "default_title": "VoxNemesis TTS (Supertonic)",
+        "default_icon": {
+            "16": "icons/optimized/Nemesis_Logo_Icon@128.png",
+            "32": "icons/optimized/Nemesis_Logo_Icon@128.png",
+            "48": "icons/optimized/Nemesis_Logo_Icon@128.png",
+            "128": "icons/optimized/Nemesis_Logo_Icon@128.png"
+        }
     },
     "content_scripts": [
         {

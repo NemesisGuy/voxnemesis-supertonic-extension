@@ -27,6 +27,14 @@ describe('UnicodeProcessor', () => {
         const output = processor.preprocessText(input);
         expect(output).toBe("Hello.");
     });
+
+    test('lengthToMask builds expected shape', () => {
+        const mask = processor.lengthToMask([2, 3], 4);
+        expect(mask).toEqual([
+            [[1, 1, 0, 0]],
+            [[1, 1, 1, 0]]
+        ]);
+    });
 });
 
 describe('TextToSpeech Chunking', () => {
