@@ -81,7 +81,11 @@ chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         id: "supertonic-read",
         title: "Read with VoxNemesis TTS (Supertonic)",
-        contexts: ["selection"]
+        contexts: ["selection"],
+        icons: {
+            16: "icons/optimized/Nemesis_Logo_Icon@128.png",
+            32: "icons/optimized/Nemesis_Logo_Icon@128.png"
+        }
     });
 });
 
