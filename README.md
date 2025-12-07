@@ -8,6 +8,11 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 - Context menu entry for quick read-out of selected text.
 - Playback controls with play/pause/stop, seeking, and progress display.
 
+## How It Works
+- Background service worker routes popup/context-menu commands to an offscreen document (MV3) that hosts ONNX Runtime Web.
+- Models/styles are fetched from Hugging Face on first use, written into Cache Storage, and reused offline.
+- WebGPU is preferred when available; otherwise ONNX falls back to WASM. Thread count is capped between 1–4 using `navigator.hardwareConcurrency`.
+
 ## Load the Extension (Chrome/Edge)
 1. Open `chrome://extensions` (or `edge://extensions`).
 2. Enable **Developer mode**.
@@ -19,11 +24,24 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 - **Play/Pause/Stop** manage the current audio buffer; **Generate** refreshes audio for the latest selection.
 - Context menu: right-click selected text → **Read with VoxNemesis TTS (Supertonic)**.
 
+## Troubleshooting
+- Overlay stuck on first run: ensure network for the first model download; the popup watchdog hides overlay once `modelsReady` is true.
+- Context menu missing: reload the extension; MV3 service worker recreates the menu on install/startup/wake.
+- WebGPU unavailable: the engine will automatically fall back to WASM; performance is lower but functional.
+- Slow machines: thread count is capped to 1–4 based on `hardwareConcurrency`. On single-core systems it stays at 1.
+
 ## Development
 - Requirements: Node 18+ and git (for optional asset fetch). Install deps with `npm install`.
 - Models download automatically at runtime inside the extension and are cached via Cache Storage. For offline development you can clone them locally with `npm run fetch:assets` (clones https://huggingface.co/Supertone/supertonic into `assets/` and strips its `.git`).
 - Run unit tests: `npm test` (Jest + jsdom). Offscreen message tests stub `chrome.runtime`/fetch to avoid network.
 - Offscreen execution lives in `offscreen.html`/`offscreen.js`; the ONNX runtime bundles are under `lib/`.
+
+### Test Coverage (quick map)
+- `tests/offscreen.messages.test.js` — message flow, busy guard, error surfacing.
+- `tests/offscreen.status.test.js` — `modelsReady`/status reporting to unblock overlay.
+- `tests/offscreen.init.test.js` — WebGPU fallback to WASM and thread capping for low-core machines.
+- `tests/popup.logic.test.js` — overlay state derivation.
+- `tests/helper.test.js` — helper utilities.
 
 ## Folder Layout
 - `background.js` — service worker wiring popup/content to the offscreen engine.
@@ -38,3 +56,7 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 ## Notes
 - Keep the `wasm-unsafe-eval` CSP entry to allow ONNX Runtime WebAssembly loading.
 - First run requires network to download models; afterwards they are served from Cache Storage.
+
+## Release Packaging
+- Bump `manifest.json` version, run `npm test`, then package with `git archive -o release/voxnemesis-supertonic-extension-<ver>.zip HEAD`.
+- Upload the zip to the Chrome/Edge store and smoke-test the store build (first-run download, cached reopen, context menu, playback).
