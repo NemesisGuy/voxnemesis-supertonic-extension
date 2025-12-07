@@ -14,6 +14,8 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 - WebGPU is preferred when available; otherwise ONNX falls back to WASM. Thread count is capped between 1–4 using `navigator.hardwareConcurrency`.
 
 ## Load the Extension (Chrome/Edge)
+You do **not** need Node or npm to use the extension. Models download automatically inside the extension on first use.
+
 1. Open `chrome://extensions` (or `edge://extensions`).
 2. Enable **Developer mode**.
 3. Click **Load unpacked** and select the repository root folder (`voxnemesis-supertonic-extension`).
@@ -32,6 +34,10 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 - Context menu missing: reload the extension; MV3 service worker recreates the menu on install/startup/wake.
 - WebGPU unavailable (any vendor: Intel/AMD/NVIDIA/Apple): the engine falls back to WASM/CPU automatically; performance is lower but functional.
 - Slow machines: thread count is capped to 1–4 based on `hardwareConcurrency`. On single-core systems it stays at 1; multi-core caps at 4 even if higher.
+
+## Privacy
+- Text and audio synthesis run locally in the browser/offscreen page. No user text or audio is sent to remote services.
+- The only network requests are to download model and style assets from the configured Hugging Face URLs, which are cached locally afterward.
 
 ## Development
 - Requirements: Node 18+ and git (for optional asset fetch). Install deps with `npm install`.
@@ -60,9 +66,10 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 ## Notes
 - Keep the `wasm-unsafe-eval` CSP entry to allow ONNX Runtime WebAssembly loading.
 - First run requires network to download models; afterwards they are served from Cache Storage.
+- You do not need npm for normal usage; only for local development/testing.
 
 ## Release Packaging
-- Bump `manifest.json` version, run `npm test`, then package with `git archive -o release/voxnemesis-supertonic-extension-<ver>.zip HEAD`.
+- Bump `manifest.json` (and `package.json`) version, run `npm test`, then package with `git archive -o release/voxnemesis-supertonic-extension-<ver>.zip HEAD`.
 - Upload the zip to the Chrome/Edge store and smoke-test the store build (first-run download, cached reopen, context menu, playback).
 
 ## Benchmarking
