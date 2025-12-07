@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "VoxNemesis TTS (Supertonic Edition)",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Local-first Chrome extension powered by the Supertonic ONNX engine.",
     "permissions": [
         "contextMenus",
