@@ -40,6 +40,7 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 - `tests/offscreen.messages.test.js` — message flow, busy guard, error surfacing.
 - `tests/offscreen.status.test.js` — `modelsReady`/status reporting to unblock overlay.
 - `tests/offscreen.init.test.js` — WebGPU fallback to WASM and thread capping for low-core machines.
+- `tests/offscreen.providers.test.js` — executionProvider selection (WebGPU vs WASM) and retry-to-WASM fallback.
 - `tests/popup.logic.test.js` — overlay state derivation.
 - `tests/helper.test.js` — helper utilities.
 
@@ -60,6 +61,9 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 ## Release Packaging
 - Bump `manifest.json` version, run `npm test`, then package with `git archive -o release/voxnemesis-supertonic-extension-<ver>.zip HEAD`.
 - Upload the zip to the Chrome/Edge store and smoke-test the store build (first-run download, cached reopen, context menu, playback).
+
+## Benchmarking
+- See `benchmarks/README.md` for a GPU vs CPU (WebGPU vs WASM) manual benchmark harness and data collection template.
 
 ## Manual Test Sweep (recommended before publish)
 1) First run: load unpacked, open popup → verify overlay shows download then hides automatically.
