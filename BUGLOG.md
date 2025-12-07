@@ -18,6 +18,4 @@ Concise history of regressions, fixes, and remaining checks.
 - Popup script scope leak. Fixed by wrapping in IIFE and restoring handlers (commit 86adbd6).
 
 ## Notes
-- `npm test` passes (Jest suites for offscreen init/status/messages, popup logic, helpers). Remaining risk is manual integration only.
-
-do we cover all cpu amd intel mac? and thier gpu to cpu fallbac ? doc we covera all gpu brands with cpu fallbsaack ? ?
+- `npm test` passes (Jest suites for offscreen init/status/messages/playback, popup logic, helpers). Remaining risk is manual integration only.

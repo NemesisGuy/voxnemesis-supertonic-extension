@@ -27,8 +27,8 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 ## Troubleshooting
 - Overlay stuck on first run: ensure network for the first model download; the popup watchdog hides overlay once `modelsReady` is true.
 - Context menu missing: reload the extension; MV3 service worker recreates the menu on install/startup/wake.
-- WebGPU unavailable: the engine will automatically fall back to WASM; performance is lower but functional.
-- Slow machines: thread count is capped to 1–4 based on `hardwareConcurrency`. On single-core systems it stays at 1.
+- WebGPU unavailable (any vendor: Intel/AMD/NVIDIA/Apple): the engine falls back to WASM/CPU automatically; performance is lower but functional.
+- Slow machines: thread count is capped to 1–4 based on `hardwareConcurrency`. On single-core systems it stays at 1; multi-core caps at 4 even if higher.
 
 ## Development
 - Requirements: Node 18+ and git (for optional asset fetch). Install deps with `npm install`.
@@ -60,3 +60,10 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 ## Release Packaging
 - Bump `manifest.json` version, run `npm test`, then package with `git archive -o release/voxnemesis-supertonic-extension-<ver>.zip HEAD`.
 - Upload the zip to the Chrome/Edge store and smoke-test the store build (first-run download, cached reopen, context menu, playback).
+
+## Manual Test Sweep (recommended before publish)
+1) First run: load unpacked, open popup → verify overlay shows download then hides automatically.
+2) Cached reopen: close/reopen popup → overlay stays hidden; playback controls responsive.
+3) Context menu: highlight page text → right-click → “Read with VoxNemesis TTS (Supertonic)” plays audio.
+4) Playback controls: generate, play, pause, resume, seek, stop; status text and progress update.
+5) Fallback check: on machines without WebGPU, confirm playback still works (WASM path) though slower.
