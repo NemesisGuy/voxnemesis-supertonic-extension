@@ -23,6 +23,9 @@ A Chrome/Edge extension that runs Supertone’s Supertonic ONNX TTS engine fully
 - Select text on any page, then click **Generate Audio** to synthesize and play with current settings.
 - **Play/Pause/Stop** manage the current audio buffer; **Generate** refreshes audio for the latest selection.
 - Context menu: right-click selected text → **Read with VoxNemesis TTS (Supertonic)**.
+- Popup reference:
+
+![Popup screenshot](docs/popup.png)
 
 ## Troubleshooting
 - Overlay stuck on first run: ensure network for the first model download; the popup watchdog hides overlay once `modelsReady` is true.

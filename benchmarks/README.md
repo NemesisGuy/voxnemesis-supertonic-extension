@@ -24,6 +24,9 @@ Fill one row per run (3+ iterations recommended per cell):
    caches.keys().then(keys => Promise.all(keys.map(k => caches.delete(k))));
    ```
 3) Ensure one benchmark mode per run: WebGPU (`useWebGPU: true`) vs CPU (`useWebGPU: false`).
+4) Visual reference: the popup controls in the extension look like:
+
+  ![Popup screenshot](../docs/popup.png)
 
 ## Benchmark helpers (run in DevTools console)
 Use the extension messaging directly from the offscreen page console. Adjust text as needed.
